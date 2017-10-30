@@ -35,11 +35,11 @@ class DialogflowDialog extends BaseDialog{
                                 let buttons: builder.ICardAction[] = [];
                                 message.buttons.forEach(button => {
                                     buttons.push({
-                                        type: "postBack",
+                                        type: button.postback ? "openUrl" : "postBack",
                                         title: button.text,
                                         text: button.text,
                                         diplayText: button.text,
-                                        value: button.text
+                                        value: button.postback || button.text
                                     });
                                 });
                                 card.buttons(buttons)
