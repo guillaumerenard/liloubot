@@ -19,6 +19,7 @@ class LilouBot {
         this.bot.use({
             botbuilder: (session: builder.Session, next: Function) => {
                 session.sendTyping();
+                session.send(session.message.user.id);
                 next();
             }
         });
