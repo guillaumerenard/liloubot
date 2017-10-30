@@ -1,0 +1,36 @@
+{
+  "name": "liloubot",
+  "version": "1.0.0",
+  "description": "Lilou bot",
+  "main": "server.js",
+  "scripts": {
+    "test": "",
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "postinstall": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guillaumerenard/liloubot"
+  },
+  "keywords": [
+    "botframework"
+  ],
+  "author": "Guillaume RENARD",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/guillaumerenard/liloubot/issues"
+  },
+  "homepage": "https://github.com/guillaumerenard/liloubot#readme",
+  "dependencies": {
+    "@types/node": "^8.0.20",
+    "apiai": "^4.0.3",
+    "botbuilder": "^3.6.0",
+    "dotenv": "^4.0.0",
+    "restify": "^4.3.0",
+    "typescript": "^2.4.2"
+  },
+  "engines": {
+    "node": "6.11.1"
+  }
+}
