@@ -21,11 +21,13 @@ class DialogflowDialog extends BaseDialog{
                     messages.forEach(message => {
                         switch(message.type) {
                             case 0:
+                                // Text
                                 responseMessage.text(message.speech);
                                 session.send(responseMessage);
                                 responseMessage = new builder.Message(session);
                                 break;
                             case 1:
+                                // Card
                                 responseMessage.attachmentLayout(builder.AttachmentLayout.carousel);
                                 let card =  new builder.HeroCard(session)
                                     .title(message.title)
@@ -47,22 +49,26 @@ class DialogflowDialog extends BaseDialog{
                                 responseMessage.attachments(responseMessageAttachments);
                                 break;
                             case 2:
+                                // Quick replies
                                 responseMessage.text(message.title);
-                                responseMessage.attachmentLayout(builder.AttachmentLayout.carousel);
+                                responseMessage.attachmentLayout(builder.AttachmentLayout.list);
+                                let quickRepliesCard =  new builder.HeroCard(session);
+                                let quickRepliesButtons: builder.ICardAction[] = [];
                                 message.replies.forEach(replie => {
-                                    let card =  new builder.HeroCard(session)
-                                    .buttons([{
+                                    quickRepliesButtons.push({
                                         type: "postBack",
                                         title: replie,
                                         text: replie,
                                         diplayText: replie,
                                         value: replie
-                                    }]);
-                                    responseMessageAttachments.push(card);
+                                    });
                                 });
+                                quickRepliesCard.buttons(quickRepliesButtons);
+                                responseMessageAttachments.push(quickRepliesCard);
                                 responseMessage.attachments(responseMessageAttachments);
                                 break;
                             case 3:
+                                // Image
                                 responseMessage.attachmentLayout(builder.AttachmentLayout.carousel);
                                 responseMessageAttachments.push(new builder.HeroCard(session)
                                     .images([builder.CardImage.create(session, message.imageUrl)]));
