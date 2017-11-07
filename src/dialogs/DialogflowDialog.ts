@@ -50,6 +50,11 @@ class DialogflowDialog extends BaseDialog{
                                 break;
                             case 2:
                                 // Quick replies
+                                if(responseMessageAttachments.length > 0) {
+                                    session.send(responseMessage);
+                                    responseMessage = new builder.Message(session);
+                                    responseMessageAttachments = [];
+                                }
                                 responseMessage.text(message.title);
                                 responseMessage.attachmentLayout(builder.AttachmentLayout.list);
                                 let quickRepliesCard =  new builder.HeroCard(session);
