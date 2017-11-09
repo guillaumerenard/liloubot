@@ -22,6 +22,11 @@ class DialogflowDialog extends BaseDialog{
                         switch(message.type) {
                             case 0:
                                 // Text
+                                if(responseMessageAttachments.length > 0) {
+                                    session.send(responseMessage);
+                                    responseMessage = new builder.Message(session);
+                                    responseMessageAttachments = [];
+                                }
                                 responseMessage.text(message.speech);
                                 session.send(responseMessage);
                                 responseMessage = new builder.Message(session);
