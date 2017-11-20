@@ -18,7 +18,7 @@ class DialogflowDialog extends BaseDialog{
                     }
                     let responseMessage = new builder.Message(session);
                     let responseMessageAttachments: builder.AttachmentType[] = [];
-                    messages.forEach(message => {
+                    for(let message of messages) {
                         switch(message.type) {
                             case 0:
                                 // Text
@@ -37,18 +37,17 @@ class DialogflowDialog extends BaseDialog{
                                 let card =  new builder.HeroCard(session)
                                     .title(message.title)
                                     .subtitle(message.subtitle)
-                                    .text("")
                                     .images([builder.CardImage.create(session, message.imageUrl)]);
                                 let buttons: builder.ICardAction[] = [];
-                                message.buttons.forEach(button => {
+                                for(let button of message.buttons) {
                                     buttons.push({
-                                        type: button.postback ? "openUrl" : "postBack",
+                                        type: /^http|https:\/\/*/.test(button.postback) ? "openUrl" : "postBack",
                                         title: button.text,
                                         text: button.text,
                                         diplayText: button.text,
                                         value: button.postback || button.text
                                     });
-                                });
+                                }
                                 card.buttons(buttons)
                                 responseMessageAttachments.push(card);
                                 responseMessage.attachments(responseMessageAttachments);
@@ -64,7 +63,7 @@ class DialogflowDialog extends BaseDialog{
                                 responseMessage.attachmentLayout(builder.AttachmentLayout.list);
                                 let quickRepliesCard =  new builder.HeroCard(session);
                                 let quickRepliesButtons: builder.ICardAction[] = [];
-                                message.replies.forEach(replie => {
+                                for(let replie of message.replies) {
                                     quickRepliesButtons.push({
                                         type: "postBack",
                                         title: replie,
@@ -72,7 +71,7 @@ class DialogflowDialog extends BaseDialog{
                                         diplayText: replie,
                                         value: replie
                                     });
-                                });
+                                }
                                 quickRepliesCard.buttons(quickRepliesButtons);
                                 responseMessageAttachments.push(quickRepliesCard);
                                 responseMessage.attachments(responseMessageAttachments);
@@ -87,7 +86,7 @@ class DialogflowDialog extends BaseDialog{
                             default:
                                 break;
                         }
-                    });
+                    }
                     if(responseMessageAttachments.length > 0) {
                         session.send(responseMessage);
                     }
