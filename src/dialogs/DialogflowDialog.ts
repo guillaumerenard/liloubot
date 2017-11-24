@@ -125,6 +125,7 @@ class DialogflowDialog extends BaseDialog{
                     // Quick replies
                     session.send(`<span style="font-family: ${DialogflowDialog.fontFamily}">${message.title}</span>`);
                     for(let replie of message.replies) {
+                        session.send(`<span style="font-family: ${DialogflowDialog.fontFamily}">${replie}</span>`);
                     }
                     break;
                 case 3:
