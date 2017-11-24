@@ -18,7 +18,7 @@ class LilouBot {
         // Middleware
         this.bot.use({
             botbuilder: (session: builder.Session, next: Function) => {
-                session.send(`Vous êtes sur ${session.message.source}`);
+                session.send(`<span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Vous êtes sur ${session.message.source}</span>`);
                 session.sendTyping();
                 next();
             }
