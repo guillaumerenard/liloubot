@@ -16,89 +16,123 @@ class DialogflowDialog extends BaseDialog{
                     if(messages.length === 0) {
                         messages = fulfillment.entity.messages;
                     }
-                    let responseMessage = new builder.Message(session);
-                    let responseMessageAttachments: builder.AttachmentType[] = [];
-                    for(let message of messages) {
-                        switch(message.type) {
-                            case 0:
-                                // Text
-                                if(responseMessageAttachments.length > 0) {
-                                    session.send(responseMessage);
-                                    responseMessage = new builder.Message(session);
-                                    responseMessageAttachments = [];
-                                }
-                                if(session.message.source === "skypeforbusiness") {
-                                    responseMessage.text(`<span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">${message.speech}</span>`);
-                                }
-                                else {
-                                    responseMessage.text(message.speech);
-                                }
-                                session.send(responseMessage);
-                                responseMessage = new builder.Message(session);
-                                break;
-                            case 1:
-                                // Card
-                                responseMessage.attachmentLayout(builder.AttachmentLayout.carousel);
-                                let card =  new builder.HeroCard(session)
-                                    .title(message.title)
-                                    .subtitle(message.subtitle)
-                                    .images([builder.CardImage.create(session, message.imageUrl)]);
-                                let buttons: builder.ICardAction[] = [];
-                                for(let button of message.buttons) {
-                                    buttons.push({
-                                        type: /^http|https:\/\/*/.test(button.postback) ? "openUrl" : "postBack",
-                                        title: button.text,
-                                        text: button.text,
-                                        diplayText: button.text,
-                                        value: button.postback || button.text
-                                    });
-                                }
-                                card.buttons(buttons)
-                                responseMessageAttachments.push(card);
-                                responseMessage.attachments(responseMessageAttachments);
-                                break;
-                            case 2:
-                                // Quick replies
-                                if(responseMessageAttachments.length > 0) {
-                                    session.send(responseMessage);
-                                    responseMessage = new builder.Message(session);
-                                    responseMessageAttachments = [];
-                                }
-                                responseMessage.text(message.title);
-                                responseMessage.attachmentLayout(builder.AttachmentLayout.list);
-                                let quickRepliesCard =  new builder.HeroCard(session);
-                                let quickRepliesButtons: builder.ICardAction[] = [];
-                                for(let replie of message.replies) {
-                                    quickRepliesButtons.push({
-                                        type: "postBack",
-                                        title: replie,
-                                        text: replie,
-                                        diplayText: replie,
-                                        value: replie
-                                    });
-                                }
-                                quickRepliesCard.buttons(quickRepliesButtons);
-                                responseMessageAttachments.push(quickRepliesCard);
-                                responseMessage.attachments(responseMessageAttachments);
-                                break;
-                            case 3:
-                                // Image
-                                responseMessage.attachmentLayout(builder.AttachmentLayout.carousel);
-                                responseMessageAttachments.push(new builder.HeroCard(session)
-                                    .images([builder.CardImage.create(session, message.imageUrl)]));
-                                responseMessage.attachments(responseMessageAttachments);
-                                break;
-                            default:
-                                break;
-                        }
+                    if(session.message.source === "skypeforbusiness") {
+                        this.skypeForBusinessResponse(session, messages);
                     }
-                    if(responseMessageAttachments.length > 0) {
-                        session.send(responseMessage);
+                    else {
+                        this.defaultResponse(session, messages);
                     }
                 }
                 session.endDialog();
             }
         ]
+    }
+
+    private defaultResponse(session: builder.Session, messages: any[]): void {
+        let responseMessage = new builder.Message(session);
+        let responseMessageAttachments: builder.AttachmentType[] = [];
+        for(let message of messages) {
+            switch(message.type) {
+                case 0:
+                    // Text
+                    if(responseMessageAttachments.length > 0) {
+                        session.send(responseMessage);
+                        responseMessage = new builder.Message(session);
+                        responseMessageAttachments = [];
+                    }
+                    responseMessage.text(message.speech);
+                    session.send(responseMessage);
+                    responseMessage = new builder.Message(session);
+                    break;
+                case 1:
+                    // Card
+                    responseMessage.attachmentLayout(builder.AttachmentLayout.carousel);
+                    let card =  new builder.HeroCard(session)
+                        .title(message.title)
+                        .subtitle(message.subtitle)
+                        .images([builder.CardImage.create(session, message.imageUrl)]);
+                    let buttons: builder.ICardAction[] = [];
+                    for(let button of message.buttons) {
+                        buttons.push({
+                            type: /^http|https:\/\/*/.test(button.postback) ? "openUrl" : "postBack",
+                            title: button.text,
+                            text: button.text,
+                            diplayText: button.text,
+                            value: button.postback || button.text
+                        });
+                    }
+                    card.buttons(buttons)
+                    responseMessageAttachments.push(card);
+                    responseMessage.attachments(responseMessageAttachments);
+                    break;
+                case 2:
+                    // Quick replies
+                    if(responseMessageAttachments.length > 0) {
+                        session.send(responseMessage);
+                        responseMessage = new builder.Message(session);
+                        responseMessageAttachments = [];
+                    }
+                    responseMessage.text(message.title);
+                    responseMessage.attachmentLayout(builder.AttachmentLayout.list);
+                    let quickRepliesCard =  new builder.HeroCard(session);
+                    let quickRepliesButtons: builder.ICardAction[] = [];
+                    for(let replie of message.replies) {
+                        quickRepliesButtons.push({
+                            type: "postBack",
+                            title: replie,
+                            text: replie,
+                            diplayText: replie,
+                            value: replie
+                        });
+                    }
+                    quickRepliesCard.buttons(quickRepliesButtons);
+                    responseMessageAttachments.push(quickRepliesCard);
+                    responseMessage.attachments(responseMessageAttachments);
+                    break;
+                case 3:
+                    // Image
+                    responseMessage.attachmentLayout(builder.AttachmentLayout.carousel);
+                    responseMessageAttachments.push(new builder.HeroCard(session)
+                        .images([builder.CardImage.create(session, message.imageUrl)]));
+                    responseMessage.attachments(responseMessageAttachments);
+                    break;
+                default:
+                    break;
+            }
+        }
+        if(responseMessageAttachments.length > 0) {
+            session.send(responseMessage);
+        }
+    }
+
+    private skypeForBusinessResponse(session: builder.Session, messages: any[]) {
+        for(let message of messages) {
+            switch(message.type) {
+                case 0:
+                    // Text
+                    session.send(`<span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">${message.speech}</span>`);
+                    break;
+                case 1:
+                    // Card
+                    session.send(`<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"><span>${message.title}</span><p>${message.subtitle}</p><img src="${message.imageUrl}" /></div>`);
+                    for(let button of message.buttons) {
+                        
+                    }
+                    break;
+                case 2:
+                    // Quick replies
+                    session.send(`<span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">${message.title}</span>`);
+                    for(let replie of message.replies) {
+                    }
+                    break;
+                case 3:
+                    // Image
+                    session.send(`<img src="${message.imageUrl}" />`);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
 
