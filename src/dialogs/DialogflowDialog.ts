@@ -27,7 +27,12 @@ class DialogflowDialog extends BaseDialog{
                                     responseMessage = new builder.Message(session);
                                     responseMessageAttachments = [];
                                 }
-                                responseMessage.text(message.speech);
+                                if(session.message.source === "skypeforbusiness") {
+                                    responseMessage.text(`<span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">${message.speech}</span>`);
+                                }
+                                else {
+                                    responseMessage.text(message.speech);
+                                }
                                 session.send(responseMessage);
                                 responseMessage = new builder.Message(session);
                                 break;
