@@ -4,6 +4,8 @@ import BaseDialog from "./basedialog";
 
 class DialogflowDialog extends BaseDialog{
 
+    private static readonly fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+
     constructor() {
         super();
         this.dialog = [
@@ -110,19 +112,19 @@ class DialogflowDialog extends BaseDialog{
             switch(message.type) {
                 case 0:
                     // Text
-                    session.send(`<span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">${message.speech}</span>`);
+                    session.send(`<span style="font-family: ${DialogflowDialog.fontFamily}">${message.speech}</span>`);
                     break;
                 case 1:
                     // Card
                     session.send(`test => ${message.imageUrl}`);
-                    session.send(`<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"><span>${message.title}</span><p>${message.subtitle || ""}</p><img src="${message.imageUrl}" /></div>`);
+                    session.send(`<div style="font-family: ${DialogflowDialog.fontFamily}"><span>${message.title}</span><p>${message.subtitle || ""}</p><img src="${message.imageUrl}" alt="${message.title}"></img></div>`);
                     for(let button of message.buttons) {
                         
                     }
                     break;
                 case 2:
                     // Quick replies
-                    session.send(`<span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">${message.title}</span>`);
+                    session.send(`<span style="font-family: ${DialogflowDialog.fontFamily}">${message.title}</span>`);
                     for(let replie of message.replies) {
                     }
                     break;
