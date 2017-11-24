@@ -116,10 +116,7 @@ class DialogflowDialog extends BaseDialog{
                     break;
                 case 1:
                     // Card
-                    let imageReader = new FileReader();
-                    imageReader.readAsDataURL(message.imageUrl);
-                    session.send(`test => ${message.imageUrl}`);
-                    session.send(`<div style="font-family: ${DialogflowDialog.fontFamily}"><span>${message.title}</span><p>${message.subtitle || ""}</p><img src="${imageReader.result}" alt="${message.title}"></img></div>`);
+                    session.send(`<div style="font-family: ${DialogflowDialog.fontFamily}"><h1>${message.title}</h1><p>${message.subtitle || ""}</p><img src="${message.imageUrl}" alt="${message.title}"></img></div>`);
                     for(let button of message.buttons) {
                         
                     }
