@@ -116,7 +116,7 @@ class DialogflowDialog extends BaseDialog{
                     break;
                 case 1:
                     // Card
-                    session.send(`<div style="font-family: ${DialogflowDialog.fontFamily}"><h1>${message.title}</h1><p>${message.subtitle || ""}</p><img src="${message.imageUrl}" alt="${message.title}"></img></div>`);
+                    session.send(`<div style="font-family: ${DialogflowDialog.fontFamily}"><h3>${message.title}</h3><p>${message.subtitle || ""}</p><img src="${message.imageUrl}" alt="${message.title}"></div>`);
                     for(let button of message.buttons) {
                         
                     }
