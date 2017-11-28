@@ -122,7 +122,11 @@ class DialogflowDialog extends BaseDialog{
                     // Card
                     responseMessage = new builder.Message(session)
                         .textFormat(builder.TextFormat.xml)
-                        .text(`<div style="font-family: ${DialogflowDialog.fontFamily}"><h3>${message.title}</h3><p>${message.subtitle || ""}</p><img src="${message.imageUrl}" alt="${message.title}"></div>`);                                        
+                        .text(`<div style="font-family: ${DialogflowDialog.fontFamily}"><h3>${message.title}</h3><p>${message.subtitle || ""}</p><img src="${message.imageUrl}" alt="${message.title}"></div>`)
+                        .addAttachment({
+                            contentUrl: message.imageUrl,
+                            contentType: "image/png"
+                        });
                     session.send(responseMessage);
                     for(let button of message.buttons) {
                         
