@@ -108,29 +108,45 @@ class DialogflowDialog extends BaseDialog{
     }
 
     private skypeForBusinessResponse(session: builder.Session, messages: any[]) {
+        let responseMessage = new builder.Message(session);
         for(let message of messages) {
             switch(message.type) {
                 case 0:
                     // Text
-                    session.send(`<span style="font-family: ${DialogflowDialog.fontFamily}">${message.speech}</span>`);
+                    responseMessage = new builder.Message(session)
+                        .textFormat(builder.TextFormat.xml)
+                        .text(`<span style="font-family: ${DialogflowDialog.fontFamily}">${message.speech}</span>`);                    
+                    session.send(responseMessage);
                     break;
                 case 1:
                     // Card
-                    session.send(`<div style="font-family: ${DialogflowDialog.fontFamily}"><h3>${message.title}</h3><p>${message.subtitle || ""}</p><img src="${message.imageUrl}" alt="${message.title}"></div>`);
+                    responseMessage = new builder.Message(session)
+                        .textFormat(builder.TextFormat.xml)
+                        .text(`<div style="font-family: ${DialogflowDialog.fontFamily}"><h3>${message.title}</h3><p>${message.subtitle || ""}</p><img src="${message.imageUrl}" alt="${message.title}"></div>`);                                        
+                    session.send(responseMessage);
                     for(let button of message.buttons) {
                         
                     }
                     break;
                 case 2:
                     // Quick replies
-                    session.send(`<span style="font-family: ${DialogflowDialog.fontFamily}">${message.title}</span>`);
+                    responseMessage = new builder.Message(session)
+                        .textFormat(builder.TextFormat.xml)
+                        .text(`<span style="font-family: ${DialogflowDialog.fontFamily}">${message.title}</span>`);
+                    session.send(responseMessage);
                     for(let replie of message.replies) {
-                        session.send(`<span style="font-family: ${DialogflowDialog.fontFamily}">${replie}</span>`);
+                        responseMessage = new builder.Message(session)
+                            .textFormat(builder.TextFormat.xml)
+                            .text(`<span style="font-family: ${DialogflowDialog.fontFamily}">${replie}</span>`);
+                        session.send(responseMessage);
                     }
                     break;
                 case 3:
                     // Image
-                    session.send(`<img src="${message.imageUrl}" />`);
+                    responseMessage = new builder.Message(session)
+                        .textFormat(builder.TextFormat.xml)
+                        .text(`<img src="${message.imageUrl}">`);
+                    session.send(responseMessage);
                     break;
                 default:
                     break;
