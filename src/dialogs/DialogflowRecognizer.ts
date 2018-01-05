@@ -14,7 +14,7 @@ class DialogflowRecognizer extends builder.IntentRecognizer {
         let result: builder.IIntentRecognizerResult = { score: 1, intent: "None", intents: [], entities: [] };
         if (context && context.message && context.message.text) {
             let request = this.apiaiApp.textRequest(context.message.text, {
-                sessionId: `${Math.random()}`
+                sessionId: `${context.message.address.conversation.id}`
             });
             request.on("response", response => {
                 result.intent = response.result.metadata.intentName;
